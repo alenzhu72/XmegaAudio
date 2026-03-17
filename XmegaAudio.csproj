@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -10,7 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NAudio" Version="2.3.0" />
+    <ProjectReference Include="XmegaAudio.AudioSdk\\XmegaAudio.AudioSdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Audio\\**\\*.cs" />
+    <Compile Remove="XmegaAudio.AudioSdk\\**\\*.cs" />
+    <Compile Remove="XmegaAudio.Samples.Basic\\**\\*.cs" />
   </ItemGroup>
 
 </Project>
