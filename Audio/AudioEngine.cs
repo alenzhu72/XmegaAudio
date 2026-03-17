@@ -18,6 +18,9 @@ public sealed class AudioEngine : IDisposable
     public bool IsRunning { get; private set; }
     public bool IsMuted { get; private set; }
 
+    public int OutputLatencyMilliseconds { get; set; } = 30;
+    public int MaxCaptureBufferMilliseconds { get; set; } = 120;
+
     public IReadOnlyList<AudioDeviceInfo> GetCaptureDevices()
     {
         using var enumerator = new MMDeviceEnumerator();
@@ -54,8 +57,13 @@ public sealed class AudioEngine : IDisposable
             captureBuffer = new BufferedWaveProvider(capture.WaveFormat)
             {
                 DiscardOnBufferOverflow = true,
-                BufferDuration = TimeSpan.FromSeconds(2)
+                BufferDuration = TimeSpan.FromMilliseconds(Math.Max(20, MaxCaptureBufferMilliseconds))
             };
+
+            captureBuffer.BufferLength = Math.Max(
+                capture.WaveFormat.BlockAlign,
+                (int)(capture.WaveFormat.AverageBytesPerSecond * (captureBuffer.BufferDuration.TotalMilliseconds / 1000.0))
+            );
 
             capture.DataAvailable += OnCaptureDataAvailable;
             capture.RecordingStopped += OnCaptureStopped;
@@ -76,7 +84,7 @@ public sealed class AudioEngine : IDisposable
 
             IWaveProvider waveProvider = new SampleToWaveProvider(volume);
 
-            output = new WasapiOut(renderDevice, AudioClientShareMode.Shared, true, 60);
+            output = new WasapiOut(renderDevice, AudioClientShareMode.Shared, true, Math.Max(10, OutputLatencyMilliseconds));
             output.Init(waveProvider);
             output.Play();
             capture.StartRecording();
