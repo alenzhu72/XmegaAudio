@@ -5,7 +5,10 @@ namespace XmegaAudio.Audio.SampleProviders;
 
 public sealed class EqualizerSampleProvider : ISampleProvider
 {
-    private static readonly float[] BandFrequenciesHz = [31.25f, 62.5f, 125f, 250f, 500f, 1000f, 2000f, 4000f, 8000f, 16000f];
+    private static readonly float[] BandFrequenciesHz = new[]
+    {
+        31.25f, 62.5f, 125f, 250f, 500f, 1000f, 2000f, 4000f, 8000f, 16000f
+    };
 
     private readonly ISampleProvider source;
     private readonly int channels;
@@ -89,4 +92,3 @@ public sealed class EqualizerSampleProvider : ISampleProvider
         }
     }
 }
-

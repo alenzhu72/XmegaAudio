@@ -6,7 +6,10 @@ namespace XmegaAudio.Controls;
 
 public sealed class EqCurveControl : FrameworkElement
 {
-    private static readonly float[] BandFrequenciesHz = [31.25f, 62.5f, 125f, 250f, 500f, 1000f, 2000f, 4000f, 8000f, 16000f];
+    private static readonly float[] BandFrequenciesHz = new[]
+    {
+        31.25f, 62.5f, 125f, 250f, 500f, 1000f, 2000f, 4000f, 8000f, 16000f
+    };
     private readonly float[] gainsDb = new float[BandFrequenciesHz.Length];
     private int? draggingIndex;
 
@@ -106,7 +109,7 @@ public sealed class EqCurveControl : FrameworkElement
             dc.DrawLine(gridPen, new Point(0, y), new Point(rect.Width, y));
         }
 
-        float[] freqs = [20f, 50f, 100f, 200f, 500f, 1000f, 2000f, 5000f, 10000f, 20000f];
+        float[] freqs = new[] { 20f, 50f, 100f, 200f, 500f, 1000f, 2000f, 5000f, 10000f, 20000f };
         for (int i = 0; i < freqs.Length; i++)
         {
             double x = FreqToX(freqs[i], rect);
@@ -199,4 +202,3 @@ public sealed class EqCurveControl : FrameworkElement
         return (float)(v * 2.0 * maxGain - maxGain);
     }
 }
-

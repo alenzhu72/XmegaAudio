@@ -74,8 +74,8 @@ public sealed class ReverbSampleProvider : ISampleProvider
         public ReverbChannel(int sampleRate)
         {
             int scale = Math.Max(1, sampleRate / 44100);
-            combs =
-            [
+            combs = new[]
+            {
                 new Comb(1116 * scale),
                 new Comb(1188 * scale),
                 new Comb(1277 * scale),
@@ -84,15 +84,15 @@ public sealed class ReverbSampleProvider : ISampleProvider
                 new Comb(1491 * scale),
                 new Comb(1557 * scale),
                 new Comb(1617 * scale)
-            ];
+            };
 
-            allpasses =
-            [
+            allpasses = new[]
+            {
                 new AllPass(556 * scale),
                 new AllPass(441 * scale),
                 new AllPass(341 * scale),
                 new AllPass(225 * scale)
-            ];
+            };
         }
 
         public void SetParameters(float roomSize01, float damping01)
@@ -183,4 +183,3 @@ public sealed class ReverbSampleProvider : ISampleProvider
         }
     }
 }
-
