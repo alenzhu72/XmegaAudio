@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11527.330 d18.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmegaAudio", "XmegaAudio.csproj", "{6B7E2098-AA58-56D8-815C-ED72D5946065}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B7E2098-AA58-56D8-815C-ED72D5946065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B7E2098-AA58-56D8-815C-ED72D5946065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B7E2098-AA58-56D8-815C-ED72D5946065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B7E2098-AA58-56D8-815C-ED72D5946065}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {98D59971-7657-47E1-AF24-28AFCC925430}
+	EndGlobalSection
+EndGlobal

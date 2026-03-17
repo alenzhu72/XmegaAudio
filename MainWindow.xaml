@@ -1,0 +1,156 @@
+<Window x:Class="XmegaAudio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XmegaAudio"
+        xmlns:controls="clr-namespace:XmegaAudio.Controls"
+        mc:Ignorable="d"
+        Title="Xmega Audio" Height="620" Width="980" MinHeight="560" MinWidth="920">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="330"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="14" Orientation="Vertical">
+                <TextBlock Text="设备" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+                <TextBlock Text="输入(麦克风)" Margin="0,0,0,4"/>
+                <ComboBox x:Name="CaptureDeviceCombo" Height="30" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+
+                <TextBlock Text="输出(监听/虚拟声卡)" Margin="0,10,0,4"/>
+                <ComboBox x:Name="RenderDeviceCombo" Height="30" DisplayMemberPath="Name" SelectedValuePath="Id" SelectionChanged="RenderDeviceCombo_SelectionChanged"/>
+
+                <Button x:Name="StartStopButton" Height="36" Margin="0,12,0,0" Content="Start" Click="StartStopButton_Click"/>
+                <TextBlock x:Name="MuteStatusText" Text="Mute: Off" Margin="0,6,0,0"/>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="SaveSettingsButton" Grid.Column="0" Height="30" Content="保存设置" Click="SaveSettingsButton_Click"/>
+                    <Button x:Name="LoadSettingsButton" Grid.Column="2" Height="30" Content="加载设置" Click="LoadSettingsButton_Click"/>
+                </Grid>
+
+                <Separator Margin="0,12,0,12"/>
+
+                <GroupBox Header="快捷键 / 音效" Margin="0,0,0,10">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="GlobalHotkeysCheck" Content="启用全局快捷键" Checked="HotkeyUiChanged" Unchecked="HotkeyUiChanged"/>
+
+                        <Grid Margin="0,10,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="130"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="静音 (Toggle)"/>
+                            <ComboBox x:Name="MuteHotkeyCombo" Grid.Row="0" Grid.Column="1" Height="26" SelectionChanged="HotkeyUiChanged"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="播放笑声"/>
+                            <ComboBox x:Name="LaughHotkeyCombo" Grid.Row="1" Grid.Column="1" Height="26" SelectionChanged="HotkeyUiChanged"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="停止音效"/>
+                            <ComboBox x:Name="StopSfxHotkeyCombo" Grid.Row="2" Grid.Column="1" Height="26" SelectionChanged="HotkeyUiChanged"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="切换降噪"/>
+                            <ComboBox x:Name="ToggleNoiseHotkeyCombo" Grid.Row="3" Grid.Column="1" Height="26" SelectionChanged="HotkeyUiChanged"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="切换自动增益"/>
+                            <ComboBox x:Name="ToggleAutoGainHotkeyCombo" Grid.Row="4" Grid.Column="1" Height="26" SelectionChanged="HotkeyUiChanged"/>
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="切换混响"/>
+                            <ComboBox x:Name="ToggleReverbHotkeyCombo" Grid.Row="5" Grid.Column="1" Height="26" SelectionChanged="HotkeyUiChanged"/>
+                        </Grid>
+
+                        <TextBlock Text="笑声文件" Margin="0,10,0,4"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="LaughFileText" Grid.Column="0" Height="26" TextChanged="HotkeyUiChanged"/>
+                            <Button Grid.Column="2" Height="26" Content="浏览" Click="BrowseLaughFile_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="背景噪音消除" Margin="0,0,0,10">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="NoiseEnabledCheck" Content="启用" Margin="0,0,0,8" Checked="AnySettingChanged" Unchecked="AnySettingChanged"/>
+
+                        <TextBlock Text="门限 (dB)"/>
+                        <Slider x:Name="NoiseThresholdSlider" Minimum="-70" Maximum="-20" ValueChanged="AnySliderChanged" IsSnapToTickEnabled="True" TickFrequency="1"/>
+
+                        <TextBlock Text="抑制量 (dB)" Margin="0,8,0,0"/>
+                        <Slider x:Name="NoiseReductionSlider" Minimum="-45" Maximum="0" ValueChanged="AnySliderChanged" IsSnapToTickEnabled="True" TickFrequency="1"/>
+
+                        <TextBlock Text="强度 (0-1)" Margin="0,8,0,0"/>
+                        <Slider x:Name="NoiseStrengthSlider" Minimum="0" Maximum="1" ValueChanged="AnySliderChanged" TickFrequency="0.01"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="提高人声电平" Margin="0,0,0,10">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="AutoGainEnabledCheck" Content="启用(自动增益+限幅)" Margin="0,0,0,8" Checked="AnySettingChanged" Unchecked="AnySettingChanged"/>
+
+                        <TextBlock Text="目标电平 (RMS dB)"/>
+                        <Slider x:Name="AutoGainTargetSlider" Minimum="-32" Maximum="-6" ValueChanged="AnySliderChanged" IsSnapToTickEnabled="True" TickFrequency="1"/>
+
+                        <TextBlock Text="最大提升 (dB)" Margin="0,8,0,0"/>
+                        <Slider x:Name="AutoGainMaxSlider" Minimum="0" Maximum="24" ValueChanged="AnySliderChanged" IsSnapToTickEnabled="True" TickFrequency="1"/>
+
+                        <TextBlock Text="限幅上限 (dB)" Margin="0,8,0,0"/>
+                        <Slider x:Name="LimiterCeilingSlider" Minimum="-6" Maximum="0" ValueChanged="AnySliderChanged" IsSnapToTickEnabled="True" TickFrequency="0.5"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="混响" Margin="0,0,0,10">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="ReverbEnabledCheck" Content="启用" Margin="0,0,0,8" Checked="AnySettingChanged" Unchecked="AnySettingChanged"/>
+
+                        <TextBlock Text="房间大小"/>
+                        <Slider x:Name="ReverbRoomSlider" Minimum="0" Maximum="1" ValueChanged="AnySliderChanged" TickFrequency="0.01"/>
+
+                        <TextBlock Text="阻尼" Margin="0,8,0,0"/>
+                        <Slider x:Name="ReverbDampingSlider" Minimum="0" Maximum="1" ValueChanged="AnySliderChanged" TickFrequency="0.01"/>
+
+                        <TextBlock Text="湿度(Wet)" Margin="0,8,0,0"/>
+                        <Slider x:Name="ReverbWetSlider" Minimum="0" Maximum="0.7" ValueChanged="AnySliderChanged" TickFrequency="0.01"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="EQ 曲线" Margin="0,0,0,10">
+                    <StackPanel Margin="10">
+                        <CheckBox x:Name="EqEnabledCheck" Content="启用" Margin="0,0,0,8" Checked="AnySettingChanged" Unchecked="AnySettingChanged"/>
+                        <Button Height="30" Content="重置为平直" Click="ResetEq_Click"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Column="1" Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="EQ 频率响应（拖动白色点调整）" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,10"/>
+            <controls:EqCurveControl x:Name="EqCurve" Grid.Row="1"/>
+        </Grid>
+    </Grid>
+</Window>
